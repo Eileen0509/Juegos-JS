@@ -1,0 +1,16 @@
+.circulo {
+    /* Establece el ancho del elemento en 100 píxeles. */
+    width: 100px;
+    
+    /* Establece la altura del elemento en 100 píxeles. */
+    height: 100px;
+    
+    /* Hace que el elemento tenga bordes redondeados, convirtiéndolo en un círculo. */
+    border-radius: 50%;
+    
+    /* Añade un margen de 10 píxeles alrededor del elemento para separarlo de otros elementos. */
+    margin: 10px;
+    
+    /* Hace que los elementos con esta clase se muestren en línea, uno al lado del otro pero con propeidades de block */
+    display: inline-block;
+}

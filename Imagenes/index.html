@@ -4,17 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Slide de Imagenes</title>
 </head>
+<!--- indicamos que la funcion se ejecute con el cuerpo de nuestro html -->
 <body onload="iniciar();">
     <h1 id="titulo1">Pase de Imagenes automatico</h1>
 
     <div id="cajaSlide">
+        <!--- en img guardamos la primera imagen de nuestra carpeta d eimagenes y le ponemos una funcion que se ejecuta al dar click sobre ella  -->
         <img id="imgSlide" src="/images/img1.jpg" title="Imagen" alt="Imagen" onclick="rotarImagenes();">
 
         <br /><br />
 
         <form>
+            <!--- ponemos dos botones que tienen la funcion d eparar las imagenes y el otro de que se continues rotando -->
             <input type="button" value="Parar"
                     onclick="parar();">
             <input type="button" value="Continuar" onclick="iniciar();">

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora</title>
+</head>
+<body>
+    <h1>A Calcular</h1>
+
+    
+<!-- input para elegir el primer nuemro -->
+
+    <input type="number" id="num1" placeholder="Numero 1">
+
+    <!--input para elegir que operacion deseamos -->
+    <select id="operacion">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select>
+    <!-- input para elegir el segundo numero -->
+    <input type="number" id="num2" placeholder="Numero 2">
+    <button onclick="calcular()">Calcular</button>
+    <!-- para que imprima el resultado de la operacion contenida en el JS -->
+    <p id="resultado"></p>
+    
+    
+<!-- llamamos al archivo js con un script en el archivo html -->
+    <script src="script.js"></script>
+</body>
+</html>

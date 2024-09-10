@@ -3,17 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Adivina el numero</title>
 </head>
 
 <body>
     <h1>Adivina el Numero</h1>
     <p>Intenta adivinar un numero entre 1 y 100</p>
+    <!-- declaramos un input con id para poder llamar ese id en el archivo JS -->
     <input type="number" id="numero" placeholder="Escribe tu numero">
+    <!-- al dar click llamamos la funcion adivinar que se declaro en el js para que se ejecute el resultado -->
     <button onclick="adivinar()">Adivinar</button>
     <p id="resultado"></p>
 
-
+<!-- llamamos al archivo js con un script en el archivo html -->
     <script src="script.js"></script>
 </body>
 </html>

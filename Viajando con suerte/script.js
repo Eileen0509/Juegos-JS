@@ -5,7 +5,7 @@ function viajarConSuerte(){
     var x = Math.random() * 10;
     var URL;
 
-    //ponemos nuestra condicion del nuemro aleatorio a que url debe dirigirse
+    //ponemos nuestra condicion del numero aleatorio a que url debe dirigirse
         if (x <= 3){
             x = 0;
             URL = "https://www.outlook.com";
