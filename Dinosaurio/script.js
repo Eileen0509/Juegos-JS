@@ -29,8 +29,9 @@ function Loop() {
 
 // Variables relacionadas con el escenario y el dinosaurio
 var sueloY = 22;
+var sueloA = -10;
 var velY = 0;
-var impulso = 900;
+var impulso = 760;
 var gravedad = 2500;
 
 // Posición del dinosaurio
@@ -39,18 +40,19 @@ var dinoPosY = sueloY;
 
 // Variables relacionadas con el escenario
 var sueloX = 0;
-var velEscenario = 1280/3;
+var velEscenario = 1280/4;
 var gameVel = 1;
 var score = 0;
 
 // Estados del juego
 var parado = false;
 var saltando = false;
+var agachao = false;
 
 // Variables para la creación de obstáculos
-var tiempoHastaObstaculo = 2;
-var tiempoObstaculoMin = 0.7;
-var tiempoObstaculoMax = 1.8;
+var tiempoHastaObstaculo = 3;
+var tiempoObstaculoMin = 1.8;
+var tiempoObstaculoMax = 1;
 var obstaculoPosY = 16;
 var obstaculos = [];
 
@@ -61,7 +63,15 @@ var tiempoNubeMax = 2.7;
 var maxNubeY = 270;
 var minNubeY = 100;
 var nubes = [];
+var pajaros = [];
 var velNube = 0.5;
+
+
+var maxPajaroY = 270;
+var minPajaroY = 16;
+var tiempoHastaPajaro = 8; // Tiempo inicial antes de que aparezca el primer pájaro
+var tiempoPajaroMin = 5; // Tiempo mínimo entre la aparición de dos pájaros
+var tiempoPajaroMax = 8; // Tiempo máximo entre la aparición de dos pájaros
 
 // Elementos del DOM que serán manipulados
 var contenedor;
@@ -71,6 +81,7 @@ var suelo;
 var gameOver;
 
 // Inicializa las variables del juego y selecciona los elementos del DOM
+//el document es el html (la app)
 function Start() {
     gameOver = document.querySelector(".game-over");
     suelo = document.querySelector(".suelo");
@@ -81,25 +92,35 @@ function Start() {
 }
 
 // Actualiza el estado del juego en cada frame
+
 function Update() {
-    if(parado) return;// Si el juego está detenido, no hace nada
-    
+    if(parado) return; // Si el juego está detenido, no hace nada
+
     MoverDinosaurio();
     MoverSuelo();
     DecidirCrearObstaculos();
     DecidirCrearNubes();
+    DecidirCrearPajaros();
     MoverObstaculos();
     MoverNubes();
-    DetectarColision();// Detecta colisiones entre el dinosaurio y los obstáculos
+    MoverPajaros();
+    DetectarColision(); // Detecta colisiones con obstáculos
+    DetectarColisionPajaros(); // Detecta colisiones con pájaros
 
-    velY -= gravedad * deltaTime;// Aplica la gravedad al dinosaurio
+    velY -= gravedad * deltaTime; // Aplica la gravedad al dinosaurio
 }
 
 // Maneja el evento de presionar la tecla de espacio para saltar
 function HandleKeyDown(ev){
-    if(ev.keyCode == 32){ // Si se presiona la barra espaciadora
+    console.log(ev.keyCode)
+    if(ev.keyCode == 32 || ev.keyCode == 38){ // Si se presiona la barra espaciadora o flecha arriba
         Saltar();// Llama a la función de salto
     }
+    if(ev.keyCode == 40 ){ // Si se presiona flecha abajo
+        console.log('Se agacho');// Llama a la función de agacharse
+        Agacharse();
+    }
+    
 }
 
 // Hace que el dinosaurio salte
@@ -108,6 +129,17 @@ function Saltar(){
         saltando = true;// Cambia el estado a "saltando"
         velY = impulso;// Aplica la velocidad del salto
         dino.classList.remove("dino-corriendo");// Quita la animación de correr
+    }
+}
+
+function Agacharse(){
+    if(dinoPosY === sueloY){// Solo puede saltar si está en el suelo
+        agachao = true;// Cambia el estado a "saltando"
+        dino.classList.add("dino-agachandose");
+        setTimeout(() => {
+            console.log("medio Segundo esperado")
+            dino.classList.remove("dino-agachandose");
+            }, 500);
     }
 }
 
@@ -165,6 +197,14 @@ function DecidirCrearNubes() {
     }
 }
 
+// Decide si se debe crear pajaros en función del tiempo transcurrido
+function DecidirCrearPajaros() {
+    tiempoHastaPajaro -= deltaTime;
+    if (tiempoHastaPajaro <= 0) {
+        CrearPajaro();
+    }
+}
+
 // Crea un nuevo obstáculo y lo añade al escenario
 function CrearObstaculo() {
     var obstaculo = document.createElement("div");
@@ -190,6 +230,18 @@ function CrearNube() {
     tiempoHastaNube = tiempoNubeMin + Math.random() * (tiempoNubeMax-tiempoNubeMin) / gameVel; // Calcula el tiempo para la próxima nube
 }
 
+function CrearPajaro() {
+    var pajaro = document.createElement("div");
+    contenedor.appendChild(pajaro);
+    pajaro.classList.add("pajaro");
+    pajaro.posX = contenedor.clientWidth;
+    pajaro.style.left = contenedor.clientWidth + "px";
+    pajaro.style.bottom = minPajaroY + Math.random() * (maxPajaroY - minPajaroY) + "px"; // Establece una posición aleatoria en el eje Y
+
+    pajaros.push(pajaro); // Añade el pájaro al arreglo de pájaros
+    tiempoHastaPajaro = tiempoPajaroMin + Math.random() * (tiempoPajaroMax - tiempoPajaroMin) / gameVel; // Calcula el tiempo para el próximo pájaro
+}
+
 function MoverObstaculos() {
     for (var i = obstaculos.length - 1; i >= 0; i--) {
         if(obstaculos[i].posX < -obstaculos[i].clientWidth) {
@@ -211,6 +263,18 @@ function MoverNubes() {
         }else{
             nubes[i].posX -= CalcularDesplazamiento() * velNube;
             nubes[i].style.left = nubes[i].posX+"px";
+        }
+    }
+}
+
+function MoverPajaros() {
+    for (var i = pajaros.length - 1; i >= 0; i--) {
+        if(pajaros[i].posX < -pajaros[i].clientWidth) {
+            pajaros[i].parentNode.removeChild(pajaros[i]);
+            pajaros.splice(i, 1);
+        }else{
+            pajaros[i].posX -= CalcularDesplazamiento() * velNube;
+            pajaros[i].style.left = pajaros[i].posX+"px";
         }
     }
 }
@@ -246,6 +310,21 @@ function DetectarColision() {
         }else{
             if(IsCollision(dino, obstaculos[i], 10, 30, 15, 20)) {
                 GameOver();// Si hay una colisión, termina el juego
+            }
+        }
+    }
+}
+
+
+function DetectarColisionPajaros() {
+    for (var i = 0; i < pajaros.length; i++) {
+        if(pajaros[i].posX > dinoPosX + dino.clientWidth) {
+            // El pájaro está demasiado lejos, no puede colisionar
+            break; //al estar en orden, no puede chocar con más
+        }else{
+            // Cambia `obstaculos[i]` por `pajaros[i]`
+            if(IsCollision(dino, pajaros[i], 10, 30, 15, 20)) {
+                GameOver();// Si hay una colisión con un pájaro, termina el juego
             }
         }
     }

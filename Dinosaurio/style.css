@@ -18,22 +18,19 @@ body{
     
     position: relative;
 
-    background: linear-gradient(#b7d6c7, transparent) #ffe2d1;/*linear-gradient(#90ebff, white);*/
+    background: linear-gradient(#4d65a8, transparent) #bde6f9;/*linear-gradient(#90ebff, white);*/
     transition: background-color 1s linear;
     overflow: hidden;
 }
 
 /*indicamos de color queremos que se torne a medida vaya corriendo en el juego*/
-.mediodia {
-    background-color: #ffdcf3;
-}
 
 .tarde {
     background-color: #ffadad;
 }
 
 .noche {
-    background-color: #aca8c7;
+    background-color: #1f2538;
 }
 /*propiedades del dinosaurio*/
 .dino {
@@ -45,8 +42,8 @@ body{
     left: 42px;
     z-index: 2;
 
-    background: url(/img/dino.png) repeat-x 0px 0px;
-    background-size: 336px 84px;
+    background: url(/img/dino1.png) repeat-x 0px 0px;
+    background-size: 600px 84px;
     background-position-x: 0px;
 
 }
@@ -55,7 +52,25 @@ body{
     animation: animarDino 0.25s steps(2) infinite;
 }
 .dino-estrellado {
-    background-position-x: -252px;
+    background-position-x: -290px;
+}
+@keyframes agacharse {
+    0% {
+      transform: translateY(0); /* Posición inicial */
+    }
+    50% {
+      transform: translateY(0); /* Baja hacia abajo */
+    }
+    100% {
+      transform: translateY(0); /* Vuelve a la posición inicial */
+    }
+}
+
+/* Ajuste para cuando el dinosaurio se agacha (último dinosaurio, segunda fila) */
+.dino-agachandose {
+    background: url(/img/agachao.png); 
+    background-size: 93px;
+    background-position-x: -280px;
 }
 /*propiedades del suelo del juego ya que es una imagen */
 .suelo {
@@ -100,6 +115,17 @@ body{
     background-size: 92px 26px;
 }
 
+.pajaro{
+    width: 70px;
+    height: 35px;
+
+    position: absolute;
+    z-index: 0;
+
+    background: url(/img/pajaro.png) no-repeat;
+    background-size: 70px 35px;
+}
+
 .score{
     width: 100px;
     height: 30px;
@@ -134,9 +160,12 @@ body{
 
 @keyframes animarDino{
     from{
-        background-position-x: -84px;
+        background-position-x: -100px;
     }
     to{
-        background-position-x: -252px;
+        background-position-x: -290px;
     }
 }
+
+
+
