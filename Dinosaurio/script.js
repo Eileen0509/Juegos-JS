@@ -31,7 +31,7 @@ function Loop() {
 var sueloY = 22;
 var sueloA = -10;
 var velY = 0;
-var impulso = 760;
+var impulso = 900;
 var gravedad = 2500;
 
 // Posición del dinosaurio
@@ -48,6 +48,7 @@ var score = 0;
 var parado = false;
 var saltando = false;
 var agachao = false;
+var pajaroActivo = false;
 
 // Variables para la creación de obstáculos
 var tiempoHastaObstaculo = 3;
@@ -63,15 +64,15 @@ var tiempoNubeMax = 2.7;
 var maxNubeY = 270;
 var minNubeY = 100;
 var nubes = [];
-var pajaros = [];
 var velNube = 0.5;
 
-
-var maxPajaroY = 270;
-var minPajaroY = 16;
-var tiempoHastaPajaro = 8; // Tiempo inicial antes de que aparezca el primer pájaro
-var tiempoPajaroMin = 5; // Tiempo mínimo entre la aparición de dos pájaros
-var tiempoPajaroMax = 8; // Tiempo máximo entre la aparición de dos pájaros
+var pajaros = [];
+var maxPajaroY = 100;
+var minPajaroY = 25;
+var tiempoHastaPajaro = 3; // Tiempo inicial antes de que aparezca el primer pájaro
+var tiempoPajaroMin = 0.9; // Tiempo mínimo entre la aparición de dos pájaros
+var tiempoPajaroMax = 2.1; // Tiempo máximo entre la aparición de dos pájaros
+var velPajaro = 0.7;
 
 // Elementos del DOM que serán manipulados
 var contenedor;
@@ -89,6 +90,7 @@ function Start() {
     textoScore = document.querySelector(".score");
     dino = document.querySelector(".dino");
     document.addEventListener("keydown", HandleKeyDown);// Detecta cuando se presiona una tecla
+    document.addEventListener("keyup", HandleKeyUp);
 }
 
 // Actualiza el estado del juego en cada frame
@@ -113,14 +115,20 @@ function Update() {
 // Maneja el evento de presionar la tecla de espacio para saltar
 function HandleKeyDown(ev){
     console.log(ev.keyCode)
-    if(ev.keyCode == 32 || ev.keyCode == 38){ // Si se presiona la barra espaciadora o flecha arriba
+    if(ev.keyCode === 32 || ev.keyCode === 38){ // Si se presiona la barra espaciadora o flecha arriba
         Saltar();// Llama a la función de salto
     }
-    if(ev.keyCode == 40 ){ // Si se presiona flecha abajo
+    if(ev.keyCode === 40 ){ // Si se presiona flecha abajo
         console.log('Se agacho');// Llama a la función de agacharse
         Agacharse();
     }
     
+}
+
+function HandleKeyUp(ev){
+    if(ev.keyCode === 40){ // Si se presiona la barra espaciadora o flecha arriba
+        levantarse();
+    }
 }
 
 // Hace que el dinosaurio salte
@@ -133,14 +141,15 @@ function Saltar(){
 }
 
 function Agacharse(){
-    if(dinoPosY === sueloY){// Solo puede saltar si está en el suelo
-        agachao = true;// Cambia el estado a "saltando"
+    if(!saltando && dinoPosY === sueloY){// Solo puede saltar si está en el suelo
+        dino.classList.remove("dino-corriendo");
         dino.classList.add("dino-agachandose");
-        setTimeout(() => {
-            console.log("medio Segundo esperado")
-            dino.classList.remove("dino-agachandose");
-            }, 500);
     }
+}
+
+function levantarse(){
+    dino.classList.add("dino-corriendo");
+    dino.classList.remove("dino-agachandose");
 }
 
 // Mueve al dinosaurio según su velocidad vertical
@@ -176,8 +185,11 @@ function CalcularDesplazamiento() {
 
 // Detiene el juego cuando el dinosaurio choca con un obstáculo
 function Estrellarse() {
-    dino.classList.remove("dino-corriendo");// Quita la animación de correr
+    dino.classList.remove("dino-agachandose");
     dino.classList.add("dino-estrellado");// Añade la animación de estrellarse
+    dino.classList.remove("dino-corriendo");// Quita la animación de correr
+    
+
     parado = true;// Detiene el juego
 }
 
@@ -199,6 +211,7 @@ function DecidirCrearNubes() {
 
 // Decide si se debe crear pajaros en función del tiempo transcurrido
 function DecidirCrearPajaros() {
+    if(!pajaroActivo)return;
     tiempoHastaPajaro -= deltaTime;
     if (tiempoHastaPajaro <= 0) {
         CrearPajaro();
@@ -282,14 +295,14 @@ function MoverPajaros() {
 function GanarPuntos() {
     score++;
     textoScore.innerText = score;
-    if(score == 5){
-        gameVel = 1.5;
-        contenedor.classList.add("mediodia");
-    }else if(score == 10) {
+    if(score == 1){
         gameVel = 2;
-        contenedor.classList.add("tarde");
-    } else if(score == 20) {
+    }else if(score == 3) {
         gameVel = 3;
+        contenedor.classList.add("tarde");
+    } else if(score == 5) {
+        gameVel = 4;
+        pajaroActivo = true;
         contenedor.classList.add("noche");
     }
     suelo.style.animationDuration = (3/gameVel)+"s";
@@ -299,6 +312,8 @@ function GanarPuntos() {
 function GameOver() {
     Estrellarse();// Llama a la función para detener el juego
     gameOver.style.display = "block";// Muestra la pantalla de Game Over
+    document.removeEventListener("keydown", HandleKeyDown);
+    document.removeEventListener("keyup", HandleKeyUp);
 }
 
 // Detecta colisiones entre el dinosaurio y los obstáculos

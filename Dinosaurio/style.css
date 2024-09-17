@@ -15,10 +15,9 @@ body{
     height: 280px;
     margin: 0 auto;
     margin-top: 50px;
-    
     position: relative;
 
-    background: linear-gradient(#4d65a8, transparent) #bde6f9;/*linear-gradient(#90ebff, white);*/
+    background: linear-gradient(#50b0d6, transparent) #bde6f9;/*linear-gradient(#90ebff, white);*/
     transition: background-color 1s linear;
     overflow: hidden;
 }
@@ -26,24 +25,23 @@ body{
 /*indicamos de color queremos que se torne a medida vaya corriendo en el juego*/
 
 .tarde {
-    background-color: #ffadad;
+    background: linear-gradient(#c25f4e, transparent) #1c375f;/
 }
 
 .noche {
-    background-color: #1f2538;
+    background: linear-gradient(#060e25, transparent) #040920;/
 }
 /*propiedades del dinosaurio*/
 .dino {
     width: 84px;
     height: 84px;
-
     position: absolute;
     bottom: 22px;
     left: 42px;
     z-index: 2;
 
-    background: url(/img/dino1.png) repeat-x 0px 0px;
-    background-size: 600px 84px;
+    background: url(/img/dino.png) repeat-x 0px 0px;
+    background-size: 336px 84px;
     background-position-x: 0px;
 
 }
@@ -51,27 +49,21 @@ body{
 .dino-corriendo {
     animation: animarDino 0.25s steps(2) infinite;
 }
-.dino-estrellado {
-    background-position-x: -290px;
-}
-@keyframes agacharse {
-    0% {
-      transform: translateY(0); /* Posición inicial */
-    }
-    50% {
-      transform: translateY(0); /* Baja hacia abajo */
-    }
-    100% {
-      transform: translateY(0); /* Vuelve a la posición inicial */
-    }
-}
-
 /* Ajuste para cuando el dinosaurio se agacha (último dinosaurio, segunda fila) */
 .dino-agachandose {
-    background: url(/img/agachao.png); 
-    background-size: 93px;
+    animation: agacharse 0.25s steps(2) infinite;
+    background: url(/img/dino-2.png) no-repeat; 
+    background-size: cover;
     background-position-x: -280px;
+    width: 110px;
+    height: 50px;
 }
+
+.dino-estrellado {
+    background-position-x: -252px;
+}
+
+
 /*propiedades del suelo del juego ya que es una imagen */
 .suelo {
     width: 200%;
@@ -116,14 +108,13 @@ body{
 }
 
 .pajaro{
-    width: 70px;
-    height: 35px;
-
+    width: 48px;
+    height: 26px;
     position: absolute;
     z-index: 0;
-
+    animation: animarPajaro 0.25s steps(2) infinite;
     background: url(/img/pajaro.png) no-repeat;
-    background-size: 70px 35px;
+    background-size: 92px 26px;
 }
 
 .score{
@@ -160,12 +151,28 @@ body{
 
 @keyframes animarDino{
     from{
-        background-position-x: -100px;
+        background-position-x: -84px;
     }
     to{
-        background-position-x: -290px;
+        background-position-x: -252px;
     }
 }
 
 
+@keyframes agacharse{
+    from{
+        background-position-x: 0px;
+    }
+    to{
+        background-position-x: -226px;
+    }
+}
 
+@keyframes animarPajaro{
+    from{
+        background-position-x: 0px;
+    }
+    to{
+        background-position-x: -100px;
+    }
+}
