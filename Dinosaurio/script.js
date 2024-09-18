@@ -109,6 +109,7 @@ function Update() {
     DetectarColision(); // Detecta colisiones con obstáculos
     DetectarColisionPajaros(); // Detecta colisiones con pájaros
 
+
     velY -= gravedad * deltaTime; // Aplica la gravedad al dinosaurio
 }
 
@@ -255,15 +256,15 @@ function CrearPajaro() {
     tiempoHastaPajaro = tiempoPajaroMin + Math.random() * (tiempoPajaroMax - tiempoPajaroMin) / gameVel; // Calcula el tiempo para el próximo pájaro
 }
 
-function MoverObstaculos() {
-    for (var i = obstaculos.length - 1; i >= 0; i--) {
-        if(obstaculos[i].posX < -obstaculos[i].clientWidth) {
-            obstaculos[i].parentNode.removeChild(obstaculos[i]);
-            obstaculos.splice(i, 1);
-            GanarPuntos();
+function MoverObstaculos() {//mueve los obstaculos y elimina los que se han salido de la pantalla
+    for (var i = obstaculos.length - 1; i >= 0; i--) {//recorre los obstaculos en orden inverso
+        if(obstaculos[i].posX < -obstaculos[i].clientWidth) {//comprueba si el obstaculo ha salido de la pantalla
+            obstaculos[i].parentNode.removeChild(obstaculos[i]);//elimina el obstaculo del DOM
+            obstaculos.splice(i, 1);//elimina el obstaculo del array
+            GanarPuntos();//aumenta la puntuacion
         }else{
-            obstaculos[i].posX -= CalcularDesplazamiento();
-            obstaculos[i].style.left = obstaculos[i].posX+"px";
+            obstaculos[i].posX -= CalcularDesplazamiento();//actualiza la posicion x del obstaculo
+            obstaculos[i].style.left = obstaculos[i].posX+"px";//ajusta la posicion del DOM
         }
     }
 }
@@ -295,12 +296,12 @@ function MoverPajaros() {
 function GanarPuntos() {
     score++;
     textoScore.innerText = score;
-    if(score == 1){
+    if(score == 10){
         gameVel = 2;
-    }else if(score == 3) {
+    }else if(score == 18) {
         gameVel = 3;
         contenedor.classList.add("tarde");
-    } else if(score == 5) {
+    } else if(score == 28) {
         gameVel = 4;
         pajaroActivo = true;
         contenedor.classList.add("noche");
