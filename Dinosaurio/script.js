@@ -5,6 +5,7 @@ var deltaTime = 0;// Diferencia de tiempo entre cada frame
 
 // Verifica si el documento está cargado completamente
 if(document.readyState === "complete" || document.readyState === "interactive"){
+    //El método setTimeout() permite ejecutar un fragmento de código, una vez transcurrido un tiempo determinado. 
     setTimeout(Init, 1);// Inicia el juego inmediatamente
 }else{
     document.addEventListener("DOMContentLoaded", Init); // Espera a que el DOM esté listo
@@ -175,8 +176,9 @@ function TocarSuelo() {
 
 // Mueve el suelo para dar la ilusión de desplazamiento
 function MoverSuelo() {
-    sueloX += CalcularDesplazamiento();// Calcula cuánto se debe mover el suelo
+    sueloX += CalcularDesplazamiento();// Calcula cuánto se debe mover el suelo, actualiza la posicion x del suelo
     suelo.style.left = -(sueloX % contenedor.clientWidth) + "px";// Actualiza la posición del suelo
+    //clientwidth proporciona el tamaño del área dentro de los bordes del elemento.
 }
 
 // Calcula cuánto debe desplazarse cada elemento en función de la velocidad del escenario
